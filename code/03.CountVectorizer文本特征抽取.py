@@ -1,5 +1,11 @@
 import jieba
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import Imputer
+from sklearn.preprocessing import MinMaxScaler  # 归一化
+from sklearn.preprocessing import StandardScaler  # 标准化
+
 
 def countvec():
     """
@@ -111,8 +117,81 @@ def tfidfvec():
     0.         0.15698297 0.         0.         0.         0.31396594
     0.15698297 0.         0.         0.15698297 0.         0.        ]]
     """
+
+
+def mm():
+    """
+    归一化处理
+    比如说,几个特征同等重要的时候,进行归一化
+    目的,让某一个特征对最终结果不会造成更大的影响
+
+    数据标准化（归一化）处理是数据挖掘的一项基础工作，
+    不同评价指标往往具有不同的量纲和量纲单位，这样的情况会影响到数据分析的结果，
+    为了消除指标之间的量纲影响，需要进行数据标准化处理，以解决数据指标之间的可比性.
+    原始数据经过数据标准化处理后，各指标处于同一数量级，适合进行综合对比评价.
+    :return:
+    """
+    mm = MinMaxScaler()
+
+    data = mm.fit_transform([[90,2,10,40],[60,4,15,45],[75,3,13,46]])
+
+    print(data)
+
+    """
+    结果:
+    [[1.         0.         0.         0.        ]
+    [0.         1.         1.         0.83333333]
+    [0.5        0.5        0.6        1.        ]]
+    """
+
+
+def stand():
+    """
+    标准化缩放,通过对原始数据进行变换把数据变换到均值为0,方差为1范围内
+
+    标准化：将特征数据的分布调整成标准正太分布，也叫高斯分布，
+    过程为两步：去均值的中心化（均值变为0）；方差的规模化（方差变为1）。
+    :return:
+    """
+    std = StandardScaler()
+
+    data = std.fit_transform([[1., -1., 3.], [2., 4., 2.], [4., 6., -1.]])
+
+    print(data)
+
+    """
+    结果:
+    [[-1.06904497 -1.35873244  0.98058068]
+    [-0.26726124  0.33968311  0.39223227]
+    [ 1.33630621  1.01904933 -1.37281295]]
+    """
+
+
+def im():
+    """
+    缺失值处理
+    :return:NOne
+    """
+    # missing_values: 填补值   strategy: 按什么计算mean平均值   axis: 按行还是列
+    # im = Imputer(missing_values='NaN', strategy='mean', axis=0)  # 这是老版本方法,已废除,不过还能用,就是有警告而已
+    im = SimpleImputer(missing_values=np.nan, strategy='mean',fill_value=0)  # missing_values参数可不带,默认为NaN
+
+    data = im.fit_transform([[1, 2], [np.nan, 3], [7, 6]])
+
+    print(data)
+
+    """
+    结果:把NaN填补成4
+    [[1. 2.]
+    [4. 3.]
+    [7. 6.]]
+    """
+
 if __name__ == '__main__':
     # countvec()
     # cutword()
     # hanzi()
-    tfidfvec()
+    # tfidfvec()
+    # mm()
+    # stand()
+    im()

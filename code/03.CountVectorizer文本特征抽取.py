@@ -187,6 +187,48 @@ def im():
     [7. 6.]]
     """
 
+from sklearn.feature_selection import VarianceThreshold
+
+
+def var():
+    """
+    特征选择:删除低方差的特征
+    :return:
+    """
+    var = VarianceThreshold(threshold=1.0)
+    data = var.fit_transform([[0, 2, 0, 3], [0, 1, 4, 3], [0, 1, 1, 3]])
+    print(data)
+    """
+    threshold=0.0的结果:
+    [[2 0]
+     [1 4]
+     [1 1]]
+    总结:把第一个和最后一个都删除了
+
+    threshold=1.0 的结果:
+    [[0]
+     [4]
+     [1]]
+    总结:就剩下第三个值
+    """
+
+from sklearn.decomposition import PCA
+
+
+def pca():
+    """
+    主成分分析,进行特征降维
+    :return:
+    """
+    pca = PCA(n_components=0.9)
+    data = pca.fit_transform([[2,8,4,5],[6,3,0,8],[5,4,9,1]])
+    print(data)
+    """
+    结果:
+    [[ 1.28620952e-15  3.82970843e+00]
+     [ 5.74456265e+00 -1.91485422e+00]
+     [-5.74456265e+00 -1.91485422e+00]]
+    """
 if __name__ == '__main__':
     # countvec()
     # cutword()
@@ -194,4 +236,6 @@ if __name__ == '__main__':
     # tfidfvec()
     # mm()
     # stand()
-    im()
+    # im()
+    # var()
+    pca()
